@@ -1,0 +1,49 @@
+[package]
+name = "nextory"
+version = "1.0.0"
+edition = "2021"
+
+[[bin]]
+name = "nextory"
+path = "src/main.rs"
+required-features = ["downloader"]
+
+[lib]
+name = "nextory"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1.0.147", features = ["serde_derive"] }
+const_format = "0.2.31"
+rand = "0.8.5"
+md-5 = "0.10.5"
+
+indicatif = { version = "0.17.1", optional = true }
+id3 = { version = "1.7.0", optional = true }
+tokio = { version = "1.21.2", features = ["full"], optional = true }
+clap = { version = "4.3.16", features = ["derive"], optional = true }
+futures-util = { version = "0.3.25", default-features = false, optional = true }
+
+[dependencies.chrono]
+version = "0.4.22"
+default-features = false
+features = ["clock", "serde"]
+
+[dependencies.reqwest]
+version = "0.11.12"
+default-features = false
+features = [
+    "stream",
+    "rustls-tls",
+    "gzip",
+    "json",
+    "multipart"
+]
+
+[features]
+mitm = []
+downloader = ["tokio", "indicatif", "id3", "clap", "futures-util"]
+
+[profile.release]
+lto = true
+panic = "abort"
