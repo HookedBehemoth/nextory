@@ -49,7 +49,7 @@ pub struct Book {
 impl std::fmt::Display for Book {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!(
-            "{}{}({}) by {}",
+            "{} {}({}) by {}",
             self.id,
             self.title,
             self.pubdate.year(),

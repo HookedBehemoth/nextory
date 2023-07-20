@@ -53,20 +53,20 @@ struct Args {
     password: Option<String>,
 
     /// Immedietly mark book as completed
-    #[arg(long, default_value_t = true)]
+    #[arg(long)]
     mark_completed: bool,
 
     /// Download all active books
-    #[arg(long, default_value_t = true)]
-    download_active: bool,
+    #[arg(long)]
+    skip_active: bool,
+
+    /// Download all inactive books
+    #[arg(long)]
+    skip_inactive: bool,
 
     /// Download new books
     #[arg(long)]
-    download_new: bool,
-
-    /// Download all inactive books
-    #[arg(long, default_value_t = true)]
-    download_inactive: bool,
+    skip_new: bool,
 
     /// Categories to download (e.g. "tttl_dynamic_2005$$ver_38")
     #[arg(short, long)]
@@ -80,8 +80,6 @@ struct Args {
 #[tokio::main]
 async fn main() -> api::Result<()> {
     let args = Args::parse();
-
-    println!("{args:?}");
 
     /* Load ouput directory, fallback to cwd */
     let dest = if let Some(path) = args.output {
@@ -119,15 +117,15 @@ async fn main() -> api::Result<()> {
 
     let downloader = Downloader::new(dest, args.mark_completed);
 
-    if args.download_inactive {
-        downloader.download_inactive(&client).await?;
-    }
-
-    if args.download_active {
+    if !args.skip_active {
         downloader.download_active(&client).await?;
     }
 
-    if args.download_new {
+    if !args.skip_inactive {
+        downloader.download_inactive(&client).await?;
+    }
+
+    if !args.skip_new {
         downloader.download_new(&client).await?;
     }
 
