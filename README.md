@@ -3,7 +3,7 @@
 A Nextory Client library and CLI.
 
 ## Warning
-This was released because Nextory seems to have overhauled it's API. All of this might stop working soon.
+This was released because Nextory has overhauled it's API. All of this stopped working.
 
 ## Usage
 
